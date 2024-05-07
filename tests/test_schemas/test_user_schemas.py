@@ -49,6 +49,42 @@ def user_response_data(user_base_data):
         "links": []
     }
 
+def test_user_first_name_below_max_length(user_base_data):
+    test_string = 'TEST NAME'
+    user_base_data['first_name'] = test_string
+    user = UserBase(**user_base_data)
+    assert user.first_name == test_string
+
+def test_user_last_name_below_max_length(user_base_data):
+    test_string = 'TEST LAST NAME'
+    user_base_data['last_name'] = test_string
+    user = UserBase(**user_base_data)
+    assert user.last_name == test_string
+
+def test_user_bio_below_max_length(user_base_data):
+    test_string = 'TEST BIO'
+    user_base_data['bio'] = test_string
+    user = UserBase(**user_base_data)
+    assert user.bio == test_string
+
+def test_user_first_name_above_max_length(user_base_data):
+    test_string = 't' * 36
+    user_base_data['first_name'] = test_string
+    with pytest.raises(ValidationError):
+        UserBase(**user_base_data)
+
+def test_user_last_name_above_max_length(user_base_data):
+    test_string = 't' * 36
+    user_base_data['last_name'] = test_string
+    with pytest.raises(ValidationError):
+        UserBase(**user_base_data)
+
+def test_user_bio_above_max_length(user_base_data):
+    test_string = 't' * 256
+    user_base_data['bio'] = test_string
+    with pytest.raises(ValidationError):
+        UserBase(**user_base_data)
+
 @pytest.fixture
 def login_request_data():
     return {"email": "john_doe_123@emai.com", "password": "SecurePassword123!"}
@@ -70,6 +106,42 @@ def test_user_update_valid(user_update_data):
     user_update = UserUpdate(**user_update_data)
     assert user_update.email == user_update_data["email"]
     assert user_update.first_name == user_update_data["first_name"]
+
+def test_user_update_first_name_below_max_length(user_base_data):
+    test_string = 'TEST NAME'
+    user_base_data['first_name'] = test_string
+    user = UserUpdate(**user_base_data)
+    assert user.first_name == test_string
+
+def test_user_update_last_name_below_max_length(user_base_data):
+    test_string = 'TEST LAST NAME'
+    user_base_data['last_name'] = test_string
+    user = UserUpdate(**user_base_data)
+    assert user.last_name == test_string
+
+def test_user_update_bio_below_max_length(user_base_data):
+    test_string = 'TEST BIO'
+    user_base_data['bio'] = test_string
+    user = UserUpdate(**user_base_data)
+    assert user.bio == test_string
+
+def test_user_update_first_name_above_max_length(user_base_data):
+    test_string = 't' * 36
+    user_base_data['first_name'] = test_string
+    with pytest.raises(ValidationError):
+        UserUpdate(**user_base_data)
+
+def test_user_update_last_name_above_max_length(user_base_data):
+    test_string = 't' * 36
+    user_base_data['last_name'] = test_string
+    with pytest.raises(ValidationError):
+        UserUpdate(**user_base_data)
+
+def test_user_update_bio_above_max_length(user_base_data):
+    test_string = 't' * 256
+    user_base_data['bio'] = test_string
+    with pytest.raises(ValidationError):
+        UserUpdate(**user_base_data)
 
 # Tests for UserResponse
 def test_user_response_valid(user_response_data):
