@@ -106,6 +106,16 @@ async def test_login_success(async_client, verified_user):
     assert decoded_token["role"] == "AUTHENTICATED", "The user role should be AUTHENTICATED"
 
 @pytest.mark.asyncio
+async def test_login_missing_data_conflict(async_client):
+    form_data = {
+        "username": "",
+        "password": ""
+    }
+    response = await async_client.post("/login/", data=urlencode(form_data), headers={"Content-Type": "application/x-www-form-urlencoded"})
+    # Check for unprocessable entity
+    assert response.status_code == 422
+
+@pytest.mark.asyncio
 async def test_login_user_not_found(async_client):
     form_data = {
         "username": "nonexistentuser@here.edu",
