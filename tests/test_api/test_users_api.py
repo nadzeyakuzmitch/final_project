@@ -81,6 +81,31 @@ async def test_create_user_invalid_email(async_client):
     response = await async_client.post("/register/", json=user_data)
     assert response.status_code == 422
 
+@pytest.mark.asyncio
+async def test_user_create_linkedin_link_set(async_client):
+    test_data = {
+        "email": "test@email.com",
+        "password": "TestPassword1",
+        "linkedin_profile_url": "https://linkedin.com/in/testlink",
+        "role": "ANONYMOUS"
+    }
+    response = await async_client.post("/register/", json=test_data)
+    assert response.status_code == 200
+    assert "https://linkedin.com/in/testlink" in response.json().get("linkedin_profile_url", "")
+
+@pytest.mark.asyncio
+async def test_user_create_github_link_set(async_client):
+    test_data = {
+        "email": "test@email.com",
+        "password": "TestPassword1",
+        "github_profile_url": "https://github.com/testlink",
+        "role": "ANONYMOUS"
+    }
+    response = await async_client.post("/register/", json=test_data)
+    assert response.status_code == 200
+    assert "https://github.com/testlink" in response.json().get("github_profile_url", "")
+
+
 import pytest
 from app.services.jwt_service import decode_token
 from urllib.parse import urlencode
@@ -104,6 +129,16 @@ async def test_login_success(async_client, verified_user):
     decoded_token = decode_token(data["access_token"])
     assert decoded_token is not None, "Failed to decode token"
     assert decoded_token["role"] == "AUTHENTICATED", "The user role should be AUTHENTICATED"
+
+@pytest.mark.asyncio
+async def test_login_missing_data_conflict(async_client):
+    form_data = {
+        "username": "",
+        "password": ""
+    }
+    response = await async_client.post("/login/", data=urlencode(form_data), headers={"Content-Type": "application/x-www-form-urlencoded"})
+    # Check for unprocessable entity
+    assert response.status_code == 422
 
 @pytest.mark.asyncio
 async def test_login_user_not_found(async_client):
