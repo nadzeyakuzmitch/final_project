@@ -87,9 +87,11 @@ async def test_user_create_linkedin_link_set(async_client):
         "email": "test@email.com",
         "password": "TestPassword1",
         "linkedin_profile_url": "https://linkedin.com/in/testlink",
+        "role": "ANONYMOUS"
     }
     response = await async_client.post("/register/", json=test_data)
     assert response.status_code == 200
+    assert "https://linkedin.com/in/testlink" in response.json().get("linkedin_profile_url", "")
 
 @pytest.mark.asyncio
 async def test_user_create_github_link_set(async_client):
@@ -97,9 +99,11 @@ async def test_user_create_github_link_set(async_client):
         "email": "test@email.com",
         "password": "TestPassword1",
         "github_profile_url": "https://github.com/testlink",
+        "role": "ANONYMOUS"
     }
     response = await async_client.post("/register/", json=test_data)
     assert response.status_code == 200
+    assert "https://github.com/testlink" in response.json().get("github_profile_url", "")
 
 
 import pytest
