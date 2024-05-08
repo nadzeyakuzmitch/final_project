@@ -53,6 +53,34 @@ class UserUpdate(UserBase):
         if not any(values.values()):
             raise ValueError("At least one field must be provided for update")
         return values
+    
+class UserNameUpdate(BaseModel):
+    first_name: Optional[str] = Field(None, min_length=1, max_length=35, example="John")
+    last_name: Optional[str] = Field(None, min_length=1, max_length=35, example="Doe")
+
+    @root_validator(pre=True)
+    def check_at_least_one_value(cls, values):
+        if not any(values.values()):
+            raise ValueError("At least one field must be provided for update")
+        return values
+    
+class UserBioUpdate(BaseModel):
+    bio: Optional[str] = Field(None, max_length=255, example="Experienced software developer specializing in web applications.")
+
+    @root_validator(pre=True)
+    def check_at_least_one_value(cls, values):
+        if not any(values.values()):
+            raise ValueError("At least one field must be provided for update")
+        return values
+    
+class UserStatusUpdate(BaseModel):
+    role: Optional[str] = Field(None, example="AUTHENTICATED")
+
+    @root_validator(pre=True)
+    def check_at_least_one_value(cls, values):
+        if not any(values.values()):
+            raise ValueError("At least one field must be provided for update")
+        return values
 
 class UserResponse(UserBase):
     id: uuid.UUID = Field(..., example=uuid.uuid4())
