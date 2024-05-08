@@ -202,6 +202,46 @@ async def test_update_user_linkedin(async_client, admin_user, admin_token):
     assert response.json()["linkedin_profile_url"] == updated_data["linkedin_profile_url"]
 
 @pytest.mark.asyncio
+async def test_update_user_first_name(async_client, admin_user, admin_token):
+    updated_data = {"first_name": "TEST NAME"}
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    response = await async_client.put(f"/users/{admin_user.id}/name", json=updated_data, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["first_name"] == updated_data["first_name"]
+
+@pytest.mark.asyncio
+async def test_update_user_last_name(async_client, admin_user, admin_token):
+    updated_data = {"last_name": "TEST NAME"}
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    response = await async_client.put(f"/users/{admin_user.id}/name", json=updated_data, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["last_name"] == updated_data["last_name"]
+
+@pytest.mark.asyncio
+async def test_update_user_bio(async_client, admin_user, admin_token):
+    updated_data = {"bio": "TEST NAME"}
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    response = await async_client.put(f"/users/{admin_user.id}/bio", json=updated_data, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["bio"] == updated_data["bio"]
+
+@pytest.mark.asyncio
+async def test_update_user_prof_status(async_client, admin_user, admin_token):
+    updated_data = {"role": "MANAGER"}
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    response = await async_client.put(f"/users/{admin_user.id}/status", json=updated_data, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["role"] == updated_data["role"]
+
+@pytest.mark.asyncio
+async def test_update_user_prof_status_admin(async_client, admin_user, admin_token):
+    updated_data = {"role": "ADMIN"}
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    response = await async_client.put(f"/users/{admin_user.id}/status", json=updated_data, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["role"] == updated_data["role"]
+
+@pytest.mark.asyncio
 async def test_list_users_as_admin(async_client, admin_token):
     response = await async_client.get(
         "/users/",

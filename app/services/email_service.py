@@ -15,6 +15,10 @@ class EmailService:
         )
         self.template_manager = template_manager
 
+    async def send_user_notification_email(self, user_data: dict):
+        html_content = self.template_manager.render_prof_update_template()
+        self.smtp_client.send_email('You prof status has been updated', html_content, user_data['email'])
+
     async def send_user_email(self, user_data: dict, email_type: str):
         subject_map = {
             'email_verification': "Verify Your Account",
@@ -35,3 +39,9 @@ class EmailService:
             "verification_url": verification_url,
             "email": user.email
         }, 'email_verification')
+
+    async def send_notification_email(self, user: User):
+        await self.send_user_notification_email({
+            "name": user.first_name,
+            "email": user.email
+        })

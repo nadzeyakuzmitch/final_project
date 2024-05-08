@@ -44,3 +44,10 @@ class TemplateManager:
         full_markdown = f"{header}\n{main_content}\n{footer}"
         html_content = markdown2.markdown(full_markdown)
         return self._apply_email_styles(html_content)
+
+    def render_prof_update_template(self) -> str:
+        """Render a markdown template with given context, applying advanced email styles."""
+
+        full_markdown = "Your prof status has been updated!"
+        html_content = markdown2.markdown(full_markdown)
+        return self._apply_email_styles(html_content)
