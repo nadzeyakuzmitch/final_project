@@ -234,6 +234,14 @@ async def test_update_user_prof_status(async_client, admin_user, admin_token):
     assert response.json()["role"] == updated_data["role"]
 
 @pytest.mark.asyncio
+async def test_update_user_prof_status_admin(async_client, admin_user, admin_token):
+    updated_data = {"role": "ADMIN"}
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    response = await async_client.put(f"/users/{admin_user.id}/status", json=updated_data, headers=headers)
+    assert response.status_code == 200
+    assert response.json()["role"] == updated_data["role"]
+
+@pytest.mark.asyncio
 async def test_list_users_as_admin(async_client, admin_token):
     response = await async_client.get(
         "/users/",
